@@ -8,7 +8,6 @@ from Extended_data import DataGen,DataLoader,DataLoader_GPU, Decimate_and_pertur
 from Extended_data import N_E, N_CV, N_T
 from Pipeline_ERTS import Pipeline_ERTS as Pipeline
 from Pipeline_EKF import Pipeline_EKF
-from Pipeline_EKF_unsupervised import Pipeline_EKF_unsupervised
 # from PF_test import PFTest
 
 from datetime import datetime
@@ -122,11 +121,11 @@ for rindex in range(0, len(r)):
    # [MSE_PF_linear_arr_partial, MSE_PF_linear_avg_partial, MSE_PF_dB_avg_partial, PF_out_partial, t_PF] = PFTest(sys_model_partialh, test_input, test_target, init_cond=None)
    # print(f"MSE PF H NL: {MSE_PF_dB_avg_partial} [dB] (T = {T_test})")
    #Evaluate RTS true
-   # print("Evaluate RTS true")
-   # [MSE_ERTS_linear_arr, MSE_ERTS_linear_avg, MSE_ERTS_dB_avg, ERTS_out] = S_Test(sys_model, test_input, test_target)
-   # #Evaluate RTS partialh optr
-   # print("Evaluate RTS partial")
-   # [MSE_ERTS_linear_arr_partialoptr, MSE_ERTS_linear_avg_partialoptr, MSE_ERTS_dB_avg_partialoptr, ERTS_out_partialoptr] = S_Test(sys_model_partialh, test_input, test_target)
+   print("Evaluate RTS true")
+   [MSE_ERTS_linear_arr, MSE_ERTS_linear_avg, MSE_ERTS_dB_avg, ERTS_out] = S_Test(sys_model, test_input, test_target)
+   #Evaluate RTS partialh optr
+   print("Evaluate RTS partial")
+   [MSE_ERTS_linear_arr_partialoptr, MSE_ERTS_linear_avg_partialoptr, MSE_ERTS_dB_avg_partialoptr, ERTS_out_partialoptr] = S_Test(sys_model_partialh, test_input, test_target)
    
    
    # Save results
@@ -162,55 +161,40 @@ for rindex in range(0, len(r)):
 
    # RTSNet with full info
    ## Build Neural Network
-   # print("RTSNet with full model info")
-   # RTSNet_model = RTSNetNN()
-   # RTSNet_model.NNBuild(sys_model)
-   # ## Train Neural Network
-   # RTSNet_Pipeline = Pipeline(strTime, "RTSNet", "RTSNet")
-   # RTSNet_Pipeline.setssModel(sys_model)
-   # RTSNet_Pipeline.setModel(RTSNet_model)
-   # RTSNet_Pipeline.setTrainingParams(n_Epochs=1000, n_Batch=30, learningRate=1e-3, weightDecay=1e-6) 
-   # # RTSNet_Pipeline.model = torch.load('ERTSNet/best-model_DTfull_rq3050_T2000.pt',map_location=dev)
-   # [MSE_cv_linear_epoch, MSE_cv_dB_epoch, MSE_train_linear_epoch, MSE_train_dB_epoch] = RTSNet_Pipeline.NNTrain(sys_model, cv_input, cv_target, train_input, train_target, path_results)
-   # ## Test Neural Network
-   # [MSE_test_linear_arr, MSE_test_linear_avg, MSE_test_dB_avg,rtsnet_out,RunTime] = RTSNet_Pipeline.NNTest(sys_model, test_input, test_target, path_results)
+   print("RTSNet with full model info")
+   RTSNet_model = RTSNetNN()
+   RTSNet_model.NNBuild(sys_model)
+   ## Train Neural Network
+   RTSNet_Pipeline = Pipeline(strTime, "RTSNet", "RTSNet")
+   RTSNet_Pipeline.setssModel(sys_model)
+   RTSNet_Pipeline.setModel(RTSNet_model)
+   RTSNet_Pipeline.setTrainingParams(n_Epochs=1000, n_Batch=30, learningRate=1e-3, weightDecay=1e-6) 
+   # RTSNet_Pipeline.model = torch.load('ERTSNet/best-model_DTfull_rq3050_T2000.pt',map_location=dev)
+   [MSE_cv_linear_epoch, MSE_cv_dB_epoch, MSE_train_linear_epoch, MSE_train_dB_epoch] = RTSNet_Pipeline.NNTrain(sys_model, cv_input, cv_target, train_input, train_target, path_results)
+   ## Test Neural Network
+   [MSE_test_linear_arr, MSE_test_linear_avg, MSE_test_dB_avg,rtsnet_out,RunTime] = RTSNet_Pipeline.NNTest(sys_model, test_input, test_target, path_results)
 
 
 
    # RTSNet with model mismatch
    ## Build Neural Network
-   # print("RTSNet with observation model mismatch")
-   # RTSNet_model = RTSNetNN()
-   # RTSNet_model.NNBuild(sys_model_partialh)
-   # ## Train Neural Network
-   # RTSNet_Pipeline = Pipeline(strTime, "RTSNet", "RTSNet")
-   # RTSNet_Pipeline.setssModel(sys_model_partialh)
-   # RTSNet_Pipeline.setModel(RTSNet_model)
-   # RTSNet_Pipeline.setTrainingParams(n_Epochs=100, n_Batch=20, learningRate=1e-4, weightDecay=1e-6)
-   # # RTSNet_Pipeline.model = torch.load('ERTSNet/best-model_DTfull_rq3050_T2000.pt',map_location=cuda0)
-   # [MSE_cv_linear_epoch, MSE_cv_dB_epoch, MSE_train_linear_epoch, MSE_train_dB_epoch] = RTSNet_Pipeline.NNTrain(sys_model_partialh, cv_input, cv_target, train_input, train_target, path_results)
-   # ## Test Neural Network
-   # [MSE_test_linear_arr, MSE_test_linear_avg, MSE_test_dB_avg,rtsnet_out,RunTime] = RTSNet_Pipeline.NNTest(sys_model_partialh, test_input, test_target, path_results)
+   print("RTSNet with observation model mismatch")
+   RTSNet_model = RTSNetNN()
+   RTSNet_model.NNBuild(sys_model_partialh)
+   ## Train Neural Network
+   RTSNet_Pipeline = Pipeline(strTime, "RTSNet", "RTSNet")
+   RTSNet_Pipeline.setssModel(sys_model_partialh)
+   RTSNet_Pipeline.setModel(RTSNet_model)
+   RTSNet_Pipeline.setTrainingParams(n_Epochs=100, n_Batch=20, learningRate=1e-4, weightDecay=1e-6)
+   # RTSNet_Pipeline.model = torch.load('ERTSNet/best-model_DTfull_rq3050_T2000.pt',map_location=cuda0)
+   [MSE_cv_linear_epoch, MSE_cv_dB_epoch, MSE_train_linear_epoch, MSE_train_dB_epoch] = RTSNet_Pipeline.NNTrain(sys_model_partialh, cv_input, cv_target, train_input, train_target, path_results)
+   ## Test Neural Network
+   [MSE_test_linear_arr, MSE_test_linear_avg, MSE_test_dB_avg,rtsnet_out,RunTime] = RTSNet_Pipeline.NNTest(sys_model_partialh, test_input, test_target, path_results)
 
 
    ############################
    ###  KNet for comparison ###
    ############################
-   # KNet without model mismatch
-   KNet_model = KalmanNetNN()
-   KNet_model.NNBuild(sys_model)
-   ## Train Neural Network
-   KNet_Pipeline = Pipeline_EKF_unsupervised(strTime, "KNet", "KalmanNet")
-   KNet_Pipeline.setModel(KNet_model)
-   KNet_Pipeline.setssModel(sys_model)
-   KNet_Pipeline.setTrainingParams(n_Epochs=200, n_Batch=10, learningRate=1e-3, weightDecay=1e-6)
-   [MSE_cv_linear_epoch, MSE_cv_dB_epoch, MSE_train_linear_epoch, MSE_train_dB_epoch] = KNet_Pipeline.NNTrain(sys_model, cv_input, cv_target, train_input, train_target, path_results, sequential_training)
-   ## Test Neural Network
-   # KNet_Pipeline.model = torch.load('KNet/model_KNetNew_DT_procmis_r30q50_T2000.pt',map_location=cuda0)
-   [MSE_test_linear_arr, MSE_test_linear_avg, MSE_test_dB_avg, KNet_KG_array, knet_out,RunTime] = KNet_Pipeline.NNTest(sys_model, test_input, test_target, path_results)
-
-   KNet_Pipeline.save()
-   
    # KNet with model mismatch
    ## Build Neural Network
    # KNet_model = KalmanNetNN()

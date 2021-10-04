@@ -124,19 +124,19 @@ for rindex in range(0, len(r)):
    
    # EKF
    # print("Start EKF test")
-   # [MSE_EKF_linear_arr, MSE_EKF_linear_avg, MSE_EKF_dB_avg, EKF_KG_array, EKF_out] = EKF_test.EKFTest(sys_model_true, test_input, test_target)
-   # print(f"MSE EKF J=5: {MSE_EKF_dB_avg} [dB] (T = {T_test})")
-   # [MSE_EKF_linear_arr_partial, MSE_EKF_linear_avg_partial, MSE_EKF_dB_avg_partial, EKF_KG_array_partial, EKF_out_partial] = EKF_test.EKFTest(sys_model, test_input, test_target)
-   # print(f"MSE EKF J=2: {MSE_EKF_dB_avg_partial} [dB] (T = {T_test})")
+   [MSE_EKF_linear_arr, MSE_EKF_linear_avg, MSE_EKF_dB_avg, EKF_KG_array, EKF_out] = EKF_test.EKFTest(sys_model_true, test_input, test_target)
+   print(f"MSE EKF J=5: {MSE_EKF_dB_avg} [dB] (T = {T_test})")
+   [MSE_EKF_linear_arr_partial, MSE_EKF_linear_avg_partial, MSE_EKF_dB_avg_partial, EKF_KG_array_partial, EKF_out_partial] = EKF_test.EKFTest(sys_model, test_input, test_target)
+   print(f"MSE EKF J=2: {MSE_EKF_dB_avg_partial} [dB] (T = {T_test})")
 
    # [MSE_EKF_dB_avg, trace_dB_avg] = EKF_test.EKFTest_evol(sys_model, test_input, test_target)
 
    # # MB Extended RTS
-   # print("Start RTS test")
-   # [MSE_ERTS_linear_arr, MSE_ERTS_linear_avg, MSE_ERTS_dB_avg, ERTS_out] = S_Test(sys_model_true, test_input, test_target)
-   # print(f"MSE RTS J=5: {MSE_ERTS_dB_avg} [dB] (T = {T_test})")
-   # [MSE_ERTS_linear_arr_partial, MSE_ERTS_linear_avg_partial, MSE_ERTS_dB_avg_partial, ERTS_out_partial] = S_Test(sys_model, test_input, test_target)
-   # print(f"MSE RTS J=2: {MSE_ERTS_dB_avg_partial} [dB] (T = {T_test})")
+   print("Start RTS test")
+   [MSE_ERTS_linear_arr, MSE_ERTS_linear_avg, MSE_ERTS_dB_avg, ERTS_out] = S_Test(sys_model_true, test_input, test_target)
+   print(f"MSE RTS J=5: {MSE_ERTS_dB_avg} [dB] (T = {T_test})")
+   [MSE_ERTS_linear_arr_partial, MSE_ERTS_linear_avg_partial, MSE_ERTS_dB_avg_partial, ERTS_out_partial] = S_Test(sys_model, test_input, test_target)
+   print(f"MSE RTS J=2: {MSE_ERTS_dB_avg_partial} [dB] (T = {T_test})")
    
    # KNet with model mismatch
    # ## Build Neural Network
@@ -147,61 +147,61 @@ for rindex in range(0, len(r)):
    # KNet_Pipeline.setModel(KNet_model)
    # KNet_Pipeline.setTrainingParams(n_Epochs=100, n_Batch=10, learningRate=1e-3, weightDecay=1e-6)
    # [MSE_cv_linear_epoch, MSE_cv_dB_epoch, MSE_train_linear_epoch, MSE_train_dB_epoch] = KNet_Pipeline.NNTrain(sys_model, cv_input_long, cv_target_long, train_input, train_target, path_results, sequential_training)
-   ## Test Neural Network
+   # # Test Neural Network
    # KNet_Pipeline.model = torch.load('KNet/model_KNetNew_DT_procmis_r30q50_T2000.pt',map_location=cuda0)
    # [MSE_test_linear_arr, MSE_test_linear_avg, MSE_test_dB_avg, KNet_KG_array, knet_out,RunTime] = KNet_Pipeline.NNTest(sys_model, test_input, test_target, path_results)
    # # Print MSE Cross Validation
    # print("MSE Test:", MSE_test_dB_avg, "[dB]")
    # [MSE_knet_test_dB_avg,trace_knet_dB_avg] = KNet_Pipeline.NNTest_evol(sys_model, test_input, test_target, path_results)
-   PlotfolderName = path_results
-   MSE_resultName = "error_evol"
-   error_evol = torch.load(PlotfolderName+MSE_resultName, map_location=dev)
-   print(error_evol.keys())
-   MSE_knet_test_dB_avg = error_evol['MSE_knet']
-   trace_knet_dB_avg = error_evol['trace_knet']
-   MSE_EKF_dB_avg = error_evol['MSE_EKF']
-   trace_dB_avg = error_evol['trace_EKF']
-   Plot = Plot(PlotfolderName, modelName='KNet')
-   print("Plot")
-   Plot.error_evolution(MSE_knet_test_dB_avg,trace_knet_dB_avg,MSE_EKF_dB_avg, trace_dB_avg)
+   # PlotfolderName = path_results
+   # MSE_resultName = "error_evol"
+   # error_evol = torch.load(PlotfolderName+MSE_resultName, map_location=dev)
+   # print(error_evol.keys())
+   # MSE_knet_test_dB_avg = error_evol['MSE_knet']
+   # trace_knet_dB_avg = error_evol['trace_knet']
+   # MSE_EKF_dB_avg = error_evol['MSE_EKF']
+   # trace_dB_avg = error_evol['trace_EKF']
+   # Plot = Plot(PlotfolderName, modelName='KNet')
+   # print("Plot")
+   # Plot.error_evolution(MSE_knet_test_dB_avg,trace_knet_dB_avg,MSE_EKF_dB_avg, trace_dB_avg)
 
    # RTSNet with model mismatch
    ## Build Neural Network
-   # print("RTSNet with model mismatch")
-   # RTSNet_model = RTSNetNN()
-   # RTSNet_model.NNBuild(sys_model)
-   # ## Train Neural Network
-   # RTSNet_Pipeline = Pipeline(strTime, "RTSNet", "RTSNet")
-   # RTSNet_Pipeline.setModel(RTSNet_model)
-   # RTSNet_Pipeline.setTrainingParams(n_Epochs=1000, n_Batch=1, learningRate=1e-3, weightDecay=1e-4)
-   # NumofParameter = RTSNet_Pipeline.count_parameters()
-   # print("Number of parameters for RTSNet: ",NumofParameter)
-   # [MSE_cv_linear_epoch, MSE_cv_dB_epoch, MSE_train_linear_epoch, MSE_train_dB_epoch] = RTSNet_Pipeline.NNTrain(sys_model, cv_input_long, cv_target_long, train_input, train_target, path_results,multipass=True)
-   # ## Test Neural Network
-   # # RTSNet_Pipeline.model = torch.load('ERTSNet/model_KNetNew_DT_procmis_r30q50_T2000.pt',map_location=cuda0)
-   # [MSE_test_linear_arr, MSE_test_linear_avg, MSE_test_dB_avg,rtsnet_out,RunTime] = RTSNet_Pipeline.NNTest(sys_model, test_input, test_target, path_results,multipass=True)
-   # # Print MSE Cross Validation
-   # print("MSE Test:", MSE_test_dB_avg, "[dB]")
+   print("RTSNet with model mismatch")
+   RTSNet_model = RTSNetNN()
+   RTSNet_model.NNBuild(sys_model)
+   ## Train Neural Network
+   RTSNet_Pipeline = Pipeline(strTime, "RTSNet", "RTSNet")
+   RTSNet_Pipeline.setModel(RTSNet_model)
+   RTSNet_Pipeline.setTrainingParams(n_Epochs=1000, n_Batch=1, learningRate=1e-3, weightDecay=1e-4)
+   NumofParameter = RTSNet_Pipeline.count_parameters()
+   print("Number of parameters for RTSNet: ",NumofParameter)
+   [MSE_cv_linear_epoch, MSE_cv_dB_epoch, MSE_train_linear_epoch, MSE_train_dB_epoch] = RTSNet_Pipeline.NNTrain(sys_model, cv_input_long, cv_target_long, train_input, train_target, path_results,multipass=True)
+   ## Test Neural Network
+   # RTSNet_Pipeline.model = torch.load('ERTSNet/model_KNetNew_DT_procmis_r30q50_T2000.pt',map_location=cuda0)
+   [MSE_test_linear_arr, MSE_test_linear_avg, MSE_test_dB_avg,rtsnet_out,RunTime] = RTSNet_Pipeline.NNTest(sys_model, test_input, test_target, path_results,multipass=True)
+   # Print MSE Cross Validation
+   print("MSE Test:", MSE_test_dB_avg, "[dB]")
    
    # Save trajectories
-   # trajfolderName = 'ERTSNet' + '/'
-   # DataResultName = traj_resultName[rindex]
-   # target_sample = torch.reshape(test_target[0,:,:],[1,m,T_test])
-   # input_sample = torch.reshape(test_input[0,:,:],[1,n,T_test])
-   # torch.save({#'PF J=5':PF_out,
-   #             #'PF J=2':PF_out_partial,
-   #             'True':target_sample,
-   #             'Observation':input_sample,
-   #             # 'EKF J=5':EKF_out,
-   #             # 'EKF J=2':EKF_out_partial,
-   #             # 'RTS J=5':ERTS_out,
-   #             # 'RTS J=2':ERTS_out_partial,
-   #             'RTSNet': rtsnet_out,
-   #             }, trajfolderName+DataResultName)
+   trajfolderName = 'ERTSNet' + '/'
+   DataResultName = traj_resultName[rindex]
+   target_sample = torch.reshape(test_target[0,:,:],[1,m,T_test])
+   input_sample = torch.reshape(test_input[0,:,:],[1,n,T_test])
+   torch.save({#'PF J=5':PF_out,
+               #'PF J=2':PF_out_partial,
+               'True':target_sample,
+               'Observation':input_sample,
+               # 'EKF J=5':EKF_out,
+               # 'EKF J=2':EKF_out_partial,
+               # 'RTS J=5':ERTS_out,
+               # 'RTS J=2':ERTS_out_partial,
+               'RTSNet': rtsnet_out,
+               }, trajfolderName+DataResultName)
 
    ## Save histogram
-   # MSE_ResultName = 'Partial_MSE_KNet' 
-   # torch.save(KNet_MSE_test_dB_avg,trajfolderName + MSE_ResultName)
+   MSE_ResultName = 'Partial_MSE_KNet' 
+   torch.save(MSE_test_dB_avg,trajfolderName + MSE_ResultName)
 
    
 

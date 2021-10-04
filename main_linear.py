@@ -75,16 +75,16 @@ print("testset size:",test_target.size())
 ##############################
 print("Evaluate Kalman Filter True")
 [MSE_KF_linear_arr, MSE_KF_linear_avg, MSE_KF_dB_avg] = KFTest(sys_model, test_input, test_target)
-# print("Evaluate Kalman Filter Partial")
-# [MSE_KF_linear_arr_partialh, MSE_KF_linear_avg_partialh, MSE_KF_dB_avg_partialh] = KFTest(sys_model_partialh, test_input, test_target)
+print("Evaluate Kalman Filter Partial")
+[MSE_KF_linear_arr_partialh, MSE_KF_linear_avg_partialh, MSE_KF_dB_avg_partialh] = KFTest(sys_model_partialh, test_input, test_target)
 
 ##############################
 ### Evaluate RTS Smoother ###
 ##############################
 print("Evaluate RTS Smoother True")
 [MSE_RTS_linear_arr, MSE_RTS_linear_avg, MSE_RTS_dB_avg] = S_Test(sys_model, test_input, test_target)
-# print("Evaluate RTS Smoother Partial")
-# [MSE_RTS_linear_arr_partialh, MSE_RTS_linear_avg_partialh, MSE_RTS_dB_avg_partialh] = S_Test(sys_model_partialh, test_input, test_target)
+print("Evaluate RTS Smoother Partial")
+[MSE_RTS_linear_arr_partialh, MSE_RTS_linear_avg_partialh, MSE_RTS_dB_avg_partialh] = S_Test(sys_model_partialh, test_input, test_target)
 
 ##############################
 ###  Compare KF and RTS    ###
@@ -136,19 +136,19 @@ RTSNet_Pipeline.save()
 
 # RTSNet with mismatched model
 ## Build Neural Network
-# print("RTSNet with observation model mismatch")
-# RTSNet_model = RTSNetNN()
-# RTSNet_model.NNBuild(sys_model_partialh)
-# ## Train Neural Network
-# RTSNet_Pipeline = Pipeline(strTime, "RTSNetPartialH", "RTSNetPartialH")
-# RTSNet_Pipeline.setssModel(sys_model_partialh)
-# RTSNet_Pipeline.setModel(RTSNet_model)
-# RTSNet_Pipeline.setTrainingParams(n_Epochs=500, n_Batch=30, learningRate=1E-3, weightDecay=1E-5)
-# # RTSNet_Pipeline.model = torch.load('ERTSNet/best-model_DTfull_rq3050_T2000.pt',map_location=dev)
-# [MSE_cv_linear_epoch, MSE_cv_dB_epoch, MSE_train_linear_epoch, MSE_train_dB_epoch] = RTSNet_Pipeline.NNTrain(sys_model_partialh, cv_input, cv_target, train_input, train_target, path_results)
-# ## Test Neural Network
-# [MSE_test_linear_arr, MSE_test_linear_avg, MSE_test_dB_avg,rtsnet_out,RunTime] = RTSNet_Pipeline.NNTest(sys_model_partialh, test_input, test_target, path_results)
-# RTSNet_Pipeline.save()
+print("RTSNet with observation model mismatch")
+RTSNet_model = RTSNetNN()
+RTSNet_model.NNBuild(sys_model_partialh)
+## Train Neural Network
+RTSNet_Pipeline = Pipeline(strTime, "RTSNetPartialH", "RTSNetPartialH")
+RTSNet_Pipeline.setssModel(sys_model_partialh)
+RTSNet_Pipeline.setModel(RTSNet_model)
+RTSNet_Pipeline.setTrainingParams(n_Epochs=500, n_Batch=30, learningRate=1E-3, weightDecay=1E-5)
+# RTSNet_Pipeline.model = torch.load('ERTSNet/best-model_DTfull_rq3050_T2000.pt',map_location=dev)
+[MSE_cv_linear_epoch, MSE_cv_dB_epoch, MSE_train_linear_epoch, MSE_train_dB_epoch] = RTSNet_Pipeline.NNTrain(sys_model_partialh, cv_input, cv_target, train_input, train_target, path_results)
+## Test Neural Network
+[MSE_test_linear_arr, MSE_test_linear_avg, MSE_test_dB_avg,rtsnet_out,RunTime] = RTSNet_Pipeline.NNTest(sys_model_partialh, test_input, test_target, path_results)
+RTSNet_Pipeline.save()
 
 
 # DatafolderName = 'Data' + '/'
