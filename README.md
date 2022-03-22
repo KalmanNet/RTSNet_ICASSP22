@@ -1,14 +1,20 @@
 # RTSNet_ICASSP22
 
-## Linear Case
+## Link to paper
+
+https://arxiv.org/pdf/2110.04717.pdf
+
+## How to run the code
+
+### Linear Case
 ```
 python3 main_linear.py
 ```
-## Non-linear Lorenz Attractor - Discrete-Time Case
+### Non-linear Lorenz Attractor - Discrete-Time Case
 ```
 python3 main_lor_DT.py 
 ```
-## Non-linear Lorenz Attractor - Decimation Case
+### Non-linear Lorenz Attractor - Decimation Case
 ```
 python3 main_lor_decimation.py
 ```
